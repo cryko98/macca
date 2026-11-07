@@ -1,7 +1,7 @@
 // Site settings: fill these in when they are ready, nothing else needs to change.
 export const SITE = {
   ca: 'GAGDqXtsZyEb3meqYDVfZ61bpbeCmhQJpxXffhkapump', // contract address (empty = "COMING SOON")
-  telegram: '', // e.g. 'https://t.me/yourgroup' (empty = "soon")
+  telegram: 'https://t.me/maccathegtagator', // Telegram group (empty = "soon")
 };
 
 export const DISCLAIMER =
