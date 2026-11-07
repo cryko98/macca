@@ -1,5 +1,5 @@
 """
-Render the 1:1 logo (round badge) and the favicon crop of Macca from assets/gator.blend.
+Render the 1:1 logo (round badge) and the favicon crop of Macca from blender/gator.blend.
 
   blender -b --factory-startup --python tools/render_logo.py -- <blend> <out_dir> [samples]
 
@@ -9,8 +9,8 @@ import bpy, math, os, sys
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
-BLEND = os.path.abspath(argv[0]) if argv else os.path.join(os.path.dirname(__file__), '..', 'assets', 'gator.blend')
-OUT = os.path.abspath(argv[1]) if len(argv) > 1 else os.path.join(os.path.dirname(__file__), '..', 'game', 'assets')
+BLEND = os.path.abspath(argv[0]) if argv else os.path.join(os.path.dirname(__file__), '..', 'blender', 'gator.blend')
+OUT = os.path.abspath(argv[1]) if len(argv) > 1 else os.path.join(os.path.dirname(__file__), '..', 'assets')
 SAMPLES = int(argv[2]) if len(argv) > 2 else 64
 os.makedirs(OUT, exist_ok=True)
 

@@ -8,8 +8,8 @@ import bpy, bmesh, math, os, sys
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
-BLEND = os.path.abspath(argv[0]) if argv else os.path.join(os.path.dirname(__file__), '..', 'assets', 'gator.blend')
-OUT = os.path.abspath(argv[1]) if len(argv) > 1 else os.path.join(os.path.dirname(__file__), '..', 'game', 'assets')
+BLEND = os.path.abspath(argv[0]) if argv else os.path.join(os.path.dirname(__file__), '..', 'blender', 'gator.blend')
+OUT = os.path.abspath(argv[1]) if len(argv) > 1 else os.path.join(os.path.dirname(__file__), '..', 'assets')
 SAMPLES = int(argv[2]) if len(argv) > 2 else 64
 os.makedirs(OUT, exist_ok=True)
 

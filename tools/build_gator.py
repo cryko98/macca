@@ -12,7 +12,7 @@ from mathutils import Vector, Matrix, Euler, Quaternion
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 HERE = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else os.getcwd()
-OUT_DIR = os.path.abspath(argv[0]) if argv else os.path.join(HERE, '..', 'assets')
+OUT_DIR = os.path.abspath(argv[0]) if argv else os.path.join(HERE, '..', 'blender')
 RENDER_DIR = os.path.abspath(argv[1]) if len(argv) > 1 else None
 os.makedirs(OUT_DIR, exist_ok=True)
 

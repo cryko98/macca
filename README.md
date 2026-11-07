@@ -1,4 +1,4 @@
-<p align="center"><img src="game/assets/logo.png" alt="Macca the Gator" width="260"></p>
+<p align="center"><img src="assets/logo.png" alt="Macca the Gator" width="260"></p>
 
 # Macca the Gator
 
@@ -13,12 +13,10 @@ Built with [three.js](https://threejs.org) (loaded from the jsDelivr CDN); no bu
 node serve.js
 ```
 
-Then open:
+Then open http://localhost:5173/ (the game is the whole site: `index.html` at the root).
 
-- http://localhost:5173/game/ – the game
-- http://localhost:5173/ – the 3D model viewer (all of Macca's animations)
-
-The pages must be served over HTTP: opening the HTML files straight from disk can't load the models.
+The page must be served over HTTP: opening `index.html` straight from disk can't load the models.
+To deploy, publish the repository root as a static site (`blender/` and `tools/` are only needed for rebuilding).
 
 ## The game
 
@@ -34,7 +32,7 @@ The pages must be served over HTTP: opening the HTML files straight from disk ca
 
 ### Site settings
 
-The contract address box and the Telegram link live in [`game/src/site.js`](game/src/site.js):
+The contract address box and the Telegram link live in [`src/site.js`](src/site.js):
 
 ```js
 ca: '',        // contract address (empty shows "COMING SOON")
@@ -45,18 +43,18 @@ telegram: '',  // e.g. 'https://t.me/yourgroup'
 
 | Path | What |
 |---|---|
-| `game/index.html`, `game/src/` | the game (world, player, vehicles, people, police, missions, animals, beach, HUD, audio) |
-| `game/assets/models/` | Macca, the cars, the police helicopter and the townsfolk (GLB) |
-| `assets/gator.glb`, `assets/gator.blend` | Macca, rigged and animated |
+| `index.html`, `src/` | the game (world, player, vehicles, people, police, missions, animals, beach, HUD, audio) |
+| `assets/models/` | Macca, the cars, the police helicopter and the townsfolk (GLB) |
+| `assets/logo.png`, `assets/favicon-*`, `favicon.ico` | logo and favicons |
+| `blender/gator.blend`, `blender/gator.glb` | Macca's Blender source, rigged and animated |
 | `tools/build_gator.py` | Blender script that models, rigs and animates Macca and exports the GLB |
-| `index.html` | model viewer |
 | `serve.js` | tiny static file server |
 
 Rebuild Macca (Blender 4.2+):
 
 ```bash
-blender -b --factory-startup --python tools/build_gator.py -- assets
-cp assets/gator.glb game/assets/models/gator.glb
+blender -b --factory-startup --python tools/build_gator.py -- blender
+cp blender/gator.glb assets/models/gator.glb
 ```
 
 ## Credits

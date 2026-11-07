@@ -1,6 +1,6 @@
-// Pack PNG favicons into a .ico (PNG-compressed entries): node tools/make_ico.js game/assets
+// Pack PNG favicons into a .ico (PNG-compressed entries): node tools/make_ico.js assets
 const fs = require('fs'), path = require('path');
-const dir = process.argv[2] || 'game/assets';
+const dir = process.argv[2] || 'assets';
 const sizes = [16, 32, 48];
 const pngs = sizes.map((s) => fs.readFileSync(path.join(dir, `favicon-${s}.png`)));
 const head = Buffer.alloc(6 + 16 * sizes.length);

@@ -1,5 +1,5 @@
-"""Scale game/assets/favicon-512.png down to every favicon size.
-  blender -b --factory-startup --python tools/favicons.py -- game/assets
+"""Scale assets/favicon-512.png down to every favicon size.
+  blender -b --factory-startup --python tools/favicons.py -- assets
 """
 import bpy, os, sys
 d = os.path.abspath(sys.argv[sys.argv.index('--') + 1])
