@@ -1,3 +1,5 @@
+<p align="center"><img src="game/assets/logo.png" alt="Macca the Gator" width="260"></p>
+
 # Macca the Gator
 
 A GTA-style browser game set in **Leonida**, a little beach town down the coast from Sol City.
