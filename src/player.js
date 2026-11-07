@@ -175,8 +175,12 @@ export class Player {
     if (input.down('KeyS') || input.down('ArrowDown')) mz -= 1;
     if (input.down('KeyA') || input.down('ArrowLeft')) mx -= 1;
     if (input.down('KeyD') || input.down('ArrowRight')) mx += 1;
+    // touch joystick: an analog direction, pushed all the way = run
+    const A = input.analog;
+    const stick = A && A.active && Math.hypot(A.x, A.y) > 0.18;
+    if (stick) (mx = A.x), (mz = A.y);
     const moving = (mx || mz) && this.busy <= 0;
-    const running = input.down('ShiftLeft') || input.down('ShiftRight');
+    const running = input.down('ShiftLeft') || input.down('ShiftRight') || (stick && Math.hypot(A.x, A.y) > 0.88);
     // water: wade in the shallows, swim once it is deeper than ~0.9 m (a little hysteresis)
     const g = W.groundY(this.pos.x, this.pos.z);
     const depth = WATER_Y - g;
@@ -322,6 +326,12 @@ export class Player {
     if (input.down('KeyS') || input.down('ArrowDown')) th -= 1;
     if (input.down('KeyA') || input.down('ArrowLeft')) st += 1;
     if (input.down('KeyD') || input.down('ArrowRight')) st -= 1;
+    // touch: the stick steers; pushed forward / back it also drives when GAS / BRAKE aren't held
+    const A = input.analog;
+    if (A && A.active) {
+      if (Math.abs(A.x) > 0.08) st = -A.x;
+      if (!th) th = A.y > 0.35 ? 1 : A.y < -0.5 ? -1 : 0;
+    }
     car.input.throttle = th;
     car.input.steer = st;
     car.input.brake = 0;

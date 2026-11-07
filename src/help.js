@@ -1,4 +1,6 @@
 // The help panel: controls, missions (with status), places on the map, side activities, graphics.
+import { touchText } from './touch.js';
+
 const $ = (id) => document.getElementById(id);
 const k = (...keys) => keys.map((x) => `<kbd>${x}</kbd>`).join(' ');
 
@@ -71,7 +73,25 @@ export class Help {
     const places = PLACES.map(([c, n, where, what]) => `<li><i style="background:${c}"></i><b>${n}</b> <span class="where">${where}</span><br>${what}</li>`).join('');
     const q = (x) => `<button class="qbtn ${G.quality === x ? 'on' : ''}" data-q="${x}">${x}</button>`;
     $('help-body').innerHTML = `
-      <details open><summary>🎮 Controls</summary>
+      ${G.touch?.on ? `<details open><summary>🎮 Touch controls</summary>
+        <div class="cols">
+          <div><h4>On foot</h4>
+            <p><b>Left thumb</b>: touch anywhere on the left and slide: a joystick appears. Push it all the way to run (it turns pink).</p>
+            <p>${k('BITE')} bite + tail whip · ${k('JUMP')} jump · ${k('DANCE')} dance</p>
+            <p>${k('CAR')} get in or jack a car: it glows gold when one is close enough</p>
+            <p>${k('USE')} sip a cocktail (+35 health), or buy a refill when it glows</p>
+            <p>Swim: just walk into the sea</p></div>
+          <div><h4>In a car</h4>
+            <p>Steer with the joystick; push it up or down to drive without buttons</p>
+            <p>${k('GAS')} ${k('BRAKE')} (reverse when stopped) · ${k('DRIFT')} handbrake</p>
+            <p>${k('NITRO')} boost · ${k('HORN')} · ${k('EXIT')} get out</p></div>
+          <div><h4>Camera &amp; menus</h4>
+            <p><b>Right thumb</b>: drag to look around, pinch with two fingers to zoom. The camera also follows Macca by itself.</p>
+            <p>${k('MAP')} big map · ${k('&#9835;')} radio · ${k('II')} pause (right edge)</p>
+            <p>${k('?')} this help · tap the story text to move it on</p></div>
+        </div>
+      </details>` : ''}
+      <details ${G.touch?.on ? '' : 'open'}><summary>🎮 ${G.touch?.on ? 'Keyboard controls' : 'Controls'}</summary>
         <div class="cols">
           <div><h4>On foot</h4>
             <p>${k('W', 'A', 'S', 'D')} or arrows: walk (the camera follows Macca)</p>
@@ -125,6 +145,12 @@ export class Help {
         <p class="lead">${q('LOW')} ${q('HIGH')} ${q('ULTRA')}</p>
         <p class="lead">LOW: for weaker computers. HIGH: sharp HD with anti-aliasing. ULTRA: HIGH + 4K shadows and soft contact shadows (ambient occlusion), needs a good graphics card. If the game runs slowly it steps down by itself until you pick a level here. Key ${k('P')} cycles them.</p>
       </details>`;
+    if (G.touch?.on) {
+      // a phone never hears about keys: drop the keyboard section, name the buttons instead
+      const body = $('help-body');
+      for (const d of body.querySelectorAll('details')) if (/Keyboard controls/.test(d.querySelector('summary').textContent)) d.remove();
+      body.innerHTML = touchText(body.innerHTML);
+    }
     const cv = $('helpmap');
     if (cv) G.hud.drawBigMap(cv, false);
   }

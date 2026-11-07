@@ -21,6 +21,7 @@ import { Help } from './help.js';
 import { initSite } from './site.js';
 import { Animals } from './animals.js';
 import { Beach } from './beach.js';
+import { Touch } from './touch.js';
 
 const $ = (id) => document.getElementById(id);
 const SAVE_KEY = 'gatorbay-save-v1';
@@ -220,6 +221,7 @@ async function boot() {
   G.missions = new Missions(G);
   G.hud = new HUD(G);
   G.help = new Help(G);
+  G.touch = new Touch(G);
   initSite(G);
   for (let i = 0; i < 12; i++) G.traffic.spawnTraffic(G.player.pos);
   // parked cars
@@ -247,7 +249,8 @@ async function boot() {
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   G.composer = composer;
-  applyQuality(G.save.quality || 'HIGH', true);
+  // phones and tablets start light; desktops start sharp (both step down by themselves if slow)
+  applyQuality(G.save.quality || (G.touch?.on ? 'LOW' : 'HIGH'), true);
   addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
@@ -267,6 +270,7 @@ async function boot() {
   G.camYaw = 2.6;
   $('playbtn').onclick = () => {
     G.audio.init();
+    G.touch?.enterFullscreen();
     $('title').style.display = 'none';
     $('hud').style.display = 'block';
     G.state = 'play';
@@ -384,9 +388,10 @@ function updateCamera(dt) {
     _t.copy(pl.pos).setY(pl.pos.y + height * 0.92);
     if (G.state === 'dead') G.camYaw += dt * 0.4;
     // follow: when Macca moves and the mouse is idle, swing round behind him
-    const moving = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].some((k) => inp.down(k));
+    const A = inp.analog;
+    const moving = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].some((k) => inp.down(k)) || (A && A.active && Math.hypot(A.x, A.y) > 0.18);
     if (moving && camIdle > 0.5 && G.state === 'play') {
-      const backward = (inp.down('KeyS') || inp.down('ArrowDown')) && !(inp.down('KeyW') || inp.down('ArrowUp'));
+      const backward = ((inp.down('KeyS') || inp.down('ArrowDown')) && !(inp.down('KeyW') || inp.down('ArrowUp'))) || (A && A.active && A.y < -0.5 && Math.abs(A.x) < 0.45);
       if (!backward) {
         const d = Math.atan2(Math.sin(pl.yaw - G.camYaw), Math.cos(pl.yaw - G.camYaw));
         G.camYaw += d * Math.min(1, dt * 2.2);
@@ -453,6 +458,7 @@ function frame(dt) {
   G.fx.update(dt);
   G.audio.update(G);
   updateCamera(dt);
+  G.touch?.update();
   G.composer.render();
   autoQuality(dt);
   inp.endFrame();

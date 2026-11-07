@@ -1,5 +1,6 @@
 // HUD: money, wanted stars, health, minimap + GPS, big map, messages, cutscene dialogue.
 import { ROADS_X, ROADS_Z, RW, PIER, terrainH, WATER_Y } from './world.js';
+import { touchText } from './touch.js';
 
 const $ = (id) => document.getElementById(id);
 const MAP_MIN = -260, MAP_SIZE = 520;
@@ -248,18 +249,21 @@ export class HUD {
 
   // ------------------------------------------------------------------ messages
   hint(text) {
+    if (this.G.touch?.on) text = touchText(text);
     this.hintEl.textContent = text;
     this.hintEl.style.opacity = 1;
     this.hintT = 0.15;
   }
 
   toast(text, secs = 4) {
+    if (this.G.touch?.on) text = touchText(text);
     this.toastEl.textContent = text;
     this.toastEl.style.opacity = 1;
     this.toastT = secs;
   }
 
   objective(text) {
+    if (this.G.touch?.on) text = touchText(text);
     this.obj.textContent = text;
     this.obj.style.opacity = text ? 1 : 0;
   }
